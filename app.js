@@ -17,6 +17,18 @@
   const importBtn = document.getElementById('import');
   const importFile = document.getElementById('import-file');
   const clearBtn = document.getElementById('clear-form');
+  const navCount = document.getElementById('nav-count');
+  const navCompletedCount = document.getElementById('nav-completed-count');
+  const navAdd = document.getElementById('nav-add');
+  const navAll = document.getElementById('nav-all');
+  const navExport = document.getElementById('nav-export');
+  const navActive = document.getElementById('nav-active');
+  const navClearCompleted = document.getElementById('nav-clear-completed');
+  const navTheme = document.getElementById('nav-theme');
+  const navRemaining = document.getElementById('nav-remaining');
+  const navCompleted = document.getElementById('nav-completed');
+
+  const state = { filterMode: 'all' };
 
   let tasks = [];
 
@@ -44,12 +56,23 @@
     const fc = filterCategory.value;
     const fp = filterPriority.value;
     let out = tasks.slice();
+    // apply top-level filter mode (all / active / completed)
+    if(state.filterMode === 'active') out = out.filter(t=>!t.done);
+    if(state.filterMode === 'completed') out = out.filter(t=>t.done);
     if(fc!=='all') out = out.filter(t=>t.category===fc);
     if(fp!=='all') out = out.filter(t=>t.priority===fp);
     if(q) out = out.filter(t=>t.title.toLowerCase().includes(q) || (t.notes||'').toLowerCase().includes(q));
     if(sortBy.value==='due') out.sort((a,b)=>{ if(!a.due) return 1; if(!b.due) return -1; return new Date(a.due)-new Date(b.due)});
     if(out.length===0){empty.style.display='block'; return}
     empty.style.display='none';
+    // update navbar counts and active filter UI
+    if(navCount) navCount.textContent = tasks.length;
+    if(navCompletedCount) navCompletedCount.textContent = tasks.filter(t=>t.done).length;
+    if(navRemaining) navRemaining.textContent = tasks.filter(t=>!t.done).length;
+    // active state
+    if(navAll) navAll.classList.toggle('active', state.filterMode==='all');
+    if(navActive) navActive.classList.toggle('active', state.filterMode==='active');
+    if(navCompleted) navCompleted.classList.toggle('active', state.filterMode==='completed');
     out.forEach(t=>{
       const li = document.createElement('li'); li.className='task';
       const cb = document.createElement('div'); cb.className='checkbox'; cb.textContent = t.done ? '✓' : '';
@@ -98,6 +121,28 @@
   });
 
   clearBtn.addEventListener('click',clearForm);
+  if(navAdd) navAdd.addEventListener('click', ()=>{ window.scrollTo({top:0,behavior:'smooth'}); titleIn.focus() });
+  if(navAll) navAll.addEventListener('click', ()=>{ state.filterMode='all'; search.value=''; filterCategory.value='all'; filterPriority.value='all'; sortBy.value='created'; render() });
+  if(navActive) navActive.addEventListener('click', ()=>{ state.filterMode='active'; render() });
+  if(navCompleted) navCompleted.addEventListener('click', ()=>{ state.filterMode='completed'; render() });
+  if(navClearCompleted) navClearCompleted.addEventListener('click', ()=>{
+    if(!confirm('Remove all completed tasks?')) return; tasks = tasks.filter(t=>!t.done); save(); render();
+  });
+  if(navExport) navExport.addEventListener('click', ()=> exportBtn.click());
+  if(navTheme) navTheme.addEventListener('click', ()=>{
+    const dark = document.body.classList.toggle('dark');
+    try{ localStorage.setItem('todo_theme', dark?'dark':'light') }catch(e){}
+  });
+  // keyboard shortcut: focus search with '/'
+  document.addEventListener('keydown', (e)=>{
+    const tag = (e.target && e.target.tagName) || '';
+    if(e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA'){
+      e.preventDefault(); search.focus();
+    }
+  });
+
+  // restore theme
+  try{ if(localStorage.getItem('todo_theme')==='dark') document.body.classList.add('dark') }catch(e){}
   [search,filterCategory,filterPriority,sortBy].forEach(el=>el.addEventListener('input',render));
 
   exportBtn.addEventListener('click', ()=>{

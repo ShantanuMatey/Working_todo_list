@@ -8,6 +8,18 @@
 </head>
 <body>
   <main class="app">
+    <nav class="navbar">
+      <div class="brand">Todo — Working List</div>
+      <div class="nav-actions">
+        <button id="nav-add">+ Add</button>
+        <button id="nav-all" class="nav-filter active">All <span id="nav-count" class="badge none">0</span></button>
+        <button id="nav-active" class="nav-filter">Active <span id="nav-remaining" class="badge normal">0</span></button>
+        <button id="nav-completed" class="nav-filter">Completed <span id="nav-completed-count" class="badge normal">0</span></button>
+        <button id="nav-clear-completed" class="alt">Clear Completed</button>
+        <button id="nav-export" class="alt">Export</button>
+        <button id="nav-theme" title="Toggle theme">🌓</button>
+      </div>
+    </nav>
     <header>
       <h1>Todo — Working List</h1>
       <p class="muted">Add tasks, set category, priority (Eisenhower), due date, and estimate.</p>

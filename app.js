@@ -62,7 +62,13 @@
       content.appendChild(h); content.appendChild(meta); if(t.notes) content.appendChild(notes);
       const actions = document.createElement('div'); actions.className='actions';
       const edit = document.createElement('button'); edit.textContent='Edit'; edit.onclick = ()=>startEdit(t.id);
-      const del = document.createElement('button'); del.textContent='Delete'; del.className='alt'; del.onclick = ()=>{ if(confirm('Delete task?')) removeTask(t.id) };
+      const del = document.createElement('button'); del.textContent='Delete'; del.className='alt'; del.onclick = ()=>{
+        if(!confirm('Delete task?')) return;
+        // play shrink animation then remove
+        li.classList.add('removing');
+        li.style.pointerEvents = 'none';
+        li.addEventListener('animationend', ()=> removeTask(t.id), {once:true});
+      };
       actions.appendChild(edit); actions.appendChild(del);
       li.appendChild(cb); li.appendChild(content); li.appendChild(actions);
       if(t.done) li.style.opacity = 0.6;

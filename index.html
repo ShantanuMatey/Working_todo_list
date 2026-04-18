@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Todo — Working List</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>Todo — Working List</h1>
+      <p class="muted">Add tasks, set category, priority (Eisenhower), due date, and estimate.</p>
+    </header>
+
+    <section class="panel form-panel">
+      <form id="task-form">
+        <input id="title" placeholder="Task title" required />
+        <select id="category">
+          <option>Work</option>
+          <option>Personal</option>
+          <option>Errands</option>
+          <option>Learning</option>
+          <option>Backlog</option>
+        </select>
+        <select id="priority">
+          <option>Urgent / Important</option>
+          <option>Important / Not Urgent</option>
+          <option>Urgent / Not Important</option>
+          <option>Neither</option>
+        </select>
+        <input id="due" type="date" />
+        <input id="estimate" placeholder="Est. mins" type="number" min="1" />
+        <textarea id="notes" placeholder="Notes (optional)"></textarea>
+        <div class="form-actions">
+          <button type="submit">Add Task</button>
+          <button type="button" id="clear-form" class="alt">Clear</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel controls">
+      <div class="filters">
+        <input id="search" placeholder="Search tasks..." />
+        <select id="filter-category">
+          <option value="all">All Categories</option>
+          <option>Work</option>
+          <option>Personal</option>
+          <option>Errands</option>
+          <option>Learning</option>
+          <option>Backlog</option>
+        </select>
+        <select id="filter-priority">
+          <option value="all">All Priorities</option>
+          <option>Urgent / Important</option>
+          <option>Important / Not Urgent</option>
+          <option>Urgent / Not Important</option>
+          <option>Neither</option>
+        </select>
+        <select id="sort-by">
+          <option value="created">Sort: Created</option>
+          <option value="due">Sort: Due Date</option>
+        </select>
+        <button id="export">Export CSV</button>
+        <button id="import">Import CSV</button>
+        <input id="import-file" type="file" accept="text/csv" style="display:none" />
+      </div>
+    </section>
+
+    <section class="panel list-panel">
+      <ul id="task-list" class="task-list"></ul>
+      <p id="empty" class="muted">No tasks yet — add one above.</p>
+    </section>
+
+    <footer class="muted small">Saved locally in your browser. No data leaves your machine unless you export it.</footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

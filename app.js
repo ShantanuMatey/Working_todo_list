@@ -27,6 +27,15 @@
   const navTheme = document.getElementById('nav-theme');
   const navRemaining = document.getElementById('nav-remaining');
   const navCompleted = document.getElementById('nav-completed');
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+  const sidebarClose = document.getElementById('sidebar-close');
+  const sLinkAll = document.getElementById('s-link-all');
+  const sLinkActive = document.getElementById('s-link-active');
+  const sLinkCompleted = document.getElementById('s-link-completed');
+  const sLinkExport = document.getElementById('s-link-export');
+  const sLinkTheme = document.getElementById('s-link-theme');
 
   const state = { filterMode: 'all' };
 
@@ -139,7 +148,24 @@
     if(e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA'){
       e.preventDefault(); search.focus();
     }
+    // close sidebar on Esc
+    if(e.key === 'Escape' && sidebar && sidebar.classList.contains('open')){
+      closeSidebar();
+    }
   });
+
+  function openSidebar(){ if(!sidebar) return; sidebar.classList.add('open'); sidebar.setAttribute('aria-hidden','false'); sidebarOverlay.classList.add('visible'); sidebarOverlay.setAttribute('aria-hidden','false'); }
+  function closeSidebar(){ if(!sidebar) return; sidebar.classList.remove('open'); sidebar.setAttribute('aria-hidden','true'); sidebarOverlay.classList.remove('visible'); sidebarOverlay.setAttribute('aria-hidden','true'); }
+
+  if(sidebarToggle) sidebarToggle.addEventListener('click', (e)=>{ e.preventDefault(); openSidebar(); });
+  if(sidebarClose) sidebarClose.addEventListener('click', (e)=>{ e.preventDefault(); closeSidebar(); });
+  if(sidebarOverlay) sidebarOverlay.addEventListener('click', ()=> closeSidebar());
+
+  if(sLinkAll) sLinkAll.addEventListener('click',(e)=>{ e.preventDefault(); state.filterMode='all'; closeSidebar(); render(); });
+  if(sLinkActive) sLinkActive.addEventListener('click',(e)=>{ e.preventDefault(); state.filterMode='active'; closeSidebar(); render(); });
+  if(sLinkCompleted) sLinkCompleted.addEventListener('click',(e)=>{ e.preventDefault(); state.filterMode='completed'; closeSidebar(); render(); });
+  if(sLinkExport) sLinkExport.addEventListener('click',(e)=>{ e.preventDefault(); exportBtn.click(); closeSidebar(); });
+  if(sLinkTheme) sLinkTheme.addEventListener('click',(e)=>{ e.preventDefault(); navTheme.click(); closeSidebar(); });
 
   // restore theme
   try{ if(localStorage.getItem('todo_theme')==='dark') document.body.classList.add('dark') }catch(e){}

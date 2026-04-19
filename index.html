@@ -9,6 +9,7 @@
 <body>
   <main class="app">
     <nav class="navbar">
+      <button id="sidebar-toggle" aria-label="Open sidebar" class="icon-btn">☰</button>
       <div class="brand">Todo — Working List</div>
       <div class="nav-actions">
         <button id="nav-add">+ Add</button>
@@ -86,6 +87,24 @@
 
     <footer class="muted small">Saved locally in your browser. No data leaves your machine unless you export it.</footer>
   </main>
+
+    <div id="sidebar-overlay" class="overlay" aria-hidden="true"></div>
+    <aside id="sidebar" class="sidebar" aria-hidden="true" role="complementary">
+      <div class="sidebar-header">
+        <h2>Menu</h2>
+        <button id="sidebar-close" aria-label="Close sidebar">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#" id="s-link-all">All Tasks</a></li>
+          <li><a href="#" id="s-link-active">Active</a></li>
+          <li><a href="#" id="s-link-completed">Completed</a></li>
+          <li><a href="#" id="s-link-export">Export</a></li>
+          <li><a href="#" id="s-link-theme">Toggle Theme</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer small muted">Tips: Press Esc to close</div>
+    </aside>
 
   <script src="app.js"></script>
 </body>
